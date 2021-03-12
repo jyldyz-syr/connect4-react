@@ -1,7 +1,16 @@
 import { render } from "react-dom";
 import React, { useEffect, useState } from "react";
 
-const initialState: Array<Array<string>>= [[], [], [], [], [], [], []];
+const initialState: Array<Array<string>> = 
+[
+  [], 
+  [], 
+  [], 
+  [], 
+  [], 
+  [], 
+  []
+];
 
 const App = () => {
   const [columns, setColumns] = useState(
