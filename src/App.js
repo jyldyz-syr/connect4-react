@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
+import { render } from "react-dom";
 
 const initialState = [[], [], [], [], [], [], []];
 
+
 const App = () => {
-  const [columns, setColumns] = useState(initialState);
+  const [columns, setColumns] = useState(JSON.parse(JSON.stringify(initialState)));
   const [players, setPlayers] = useState({
     P1: "Player 1",
     P2: "Player 2",
@@ -11,21 +13,14 @@ const App = () => {
   const [currentPlayer, setCurrentPlayer] = useState("P1");
   const [winner, setWinner] = useState(null);
 
+
   const setPlayersOne = () => {
     let P1;
     let P2;
 
+
     P1 = window.prompt(`Enter your name`);
     P2 = window.prompt(`Enter your name`);
-
-    return {
-      P1,
-      P2,
-    };
-  };
-
-  useEffect(() => {
-    const { P1, P2 } = setPlayersOne();
 
     if (
       P1 === P2 ||
@@ -35,18 +30,23 @@ const App = () => {
       P2.trim().length === 0
     ) {
       alert("Error: give different names to players");
-
+  
       setPlayersOne();
     }
+
+    return {
+      P1,
+      P2,
+    };
+  };
+
+
+  useEffect(() => {
+    const { P1, P2 } = setPlayersOne();
 
     setPlayers({ P1, P2 });
   }, []);
 
-  useEffect(() => {
-    if (!!winner) {
-      setColumns(initialState);
-    }
-  }, [winner]);
 
   const clickHandler = (id) => {
     const newArr = columns;
@@ -65,15 +65,16 @@ const App = () => {
     checkWinner();
   };
 
+
   const checkWinner = () => {
-    columns.forEach((el) => {
+    columns.forEach((column) => {
       let p1Column = 0;
       let p2Column = 0;
       let p1Row = 0;
       let p2Row = 0;
 
-      for (let i = 0; i < el.length; i++) {
-        if (el[i] === el[i + 1]) {
+      for (let i = 0; i < column.length; i++) {
+        if (column[i] === column[i + 1]) {
           if (i === "P1") {
             p1Column++;
             p2Column = 0;
@@ -115,6 +116,8 @@ const App = () => {
     }
   };
 
+ 
+
   const wrapperStyle = {
     width: "490px",
     display: "flex",
@@ -131,6 +134,8 @@ const App = () => {
     alignItems: "center",
   };
 
+
+
   const getDiskStyle = (x) => ({
     width: "50px",
     height: "50px",
@@ -143,18 +148,24 @@ const App = () => {
     color: x === "P1" ? "white" : "yellow",
   });
 
+
+  const cleanBoard =()=> {
+    setWinner(null)
+    setColumns((JSON.parse(JSON.stringify(initialState))))
+  }
+
   return (
     <>
       {!!winner && `${winner} Win!`}
       <div style={wrapperStyle}>
-        {columns.map((el, idx) => {
+        {columns.map((column, idx) => {
           return (
             <div
               key={idx}
               style={columnStyle}
-              onClick={() => clickHandler(idx)}
+              onClick={!!winner?cleanBoard: () => clickHandler(idx)}
             >
-              {el.map((personDisc, i) => {
+              {column.map((personDisc, i) => {
                 const currentDiscStyle = getDiskStyle(personDisc);
                 return (
                   <div key={i} style={currentDiscStyle}>
