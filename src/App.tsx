@@ -8,7 +8,7 @@ const App = () => {
     JSON.parse(JSON.stringify(initialState))
   );
 
-  const [players, setPlayers] = useState<{[key: string]: string |null}>({
+  const [players, setPlayers] = useState<{ [key: string]: string | null }>({
     P1: "Player 1",
     P2: "Player 2",
   });
@@ -47,7 +47,7 @@ const App = () => {
     setPlayers({ P1, P2 });
   }, []);
 
-  const clickHandler = (id: number) => {
+  const clickHandler = (id: number) => { 
     const newArr = columns;
 
     if (newArr[id].length >= 6) return;
@@ -71,55 +71,105 @@ const App = () => {
     let p2Row: number = 0;
     let p1Diagonal: number = 0;
     let p2Diagonal: number = 0;
+    let p1BackDiagonal: number = 0;
+    let p2BackDiagonal: number = 0;
+    let columnsLength: number = columns.length - 1;
+    let rowLength: number = 5;
 
-    for (let c = 0; c < columns.length; c++) {
-      for (let i = 0; i < columns[c].length; i++) {
-        if (columns[c][i] && columns[c][i + 1]) {
+    for (let c = 0; c < columnsLength; c++) {
+      for (let i = 0; i < rowLength; i++) {
+        if (
+          columns[c][i] &&
+          columns[c][i + 1] &&
+          columns[c][i + 2] &&
+          columns[c][i + 3]
+        ) {
           if (
             columns[c][i] === columns[c][i + 1] &&
             columns[c][i + 1] === columns[c][i + 2] &&
             columns[c][i + 2] === columns[c][i + 3]
           ) {
             if (columns[c][i] === "P1") {
-              p1Column += 1;
+              p1Column = 1;
             } else {
-              p2Column += 1;
+              p2Column = 1;
             }
           }
         }
       }
     }
 
-    for (let c = 0; c < columns.length; c++) {
-      for (let i = 0; i < columns[c].length; i++) {
-        if (columns[c][i] && columns[c + 1] && columns[c + 1][i]) {
+    for (let c = 0; c < columnsLength; c++) {
+      for (let i = 0; i < rowLength; i++) {
+        if (
+          columns[c][i] &&
+          columns[c + 1] &&
+          columns[c + 1][i] &&
+          columns[c + 2] &&
+          columns[c + 3]
+        ) {
           if (
             columns[c][i] === columns[c + 1][i] &&
             columns[c + 1][i] === columns[c + 2][i] &&
             columns[c + 2][i] === columns[c + 3][i]
           ) {
             if (columns[c][i] === "P1") {
-              p1Row += 1;
+              p1Row = 1;
             } else {
-              p2Row += 1;
+              p2Row = 1;
             }
           }
         }
       }
     }
 
-    for (let c = 0; c < columns.length; c++) {
-      for (let i = 0; i < columns[c].length; i++) {
-        if (columns[c][i] && columns[c + 1] && columns[c + 1][i + 1]) {
+    for (let c = 0; c < columnsLength; c++) {
+      for (let i = 0; i < rowLength; i++) {
+        if (
+          columns[c][i] &&
+          columns[c + 1] &&
+          columns[c + 2] &&
+          columns[c + 3] &&
+          columns[c + 1][i + 1] &&
+          columns[c + 2][i + 2] &&
+          columns[c + 3][i + 3]
+        ) {
           if (
             columns[c][i] === columns[c + 1][i + 1] &&
             columns[c + 1][i + 1] === columns[c + 2][i + 2] &&
             columns[c + 2][i + 2] === columns[c + 3][i + 3]
           ) {
             if (columns[c][i] === "P1") {
-              p1Diagonal += 1;
+              p1Diagonal = 1;
             } else {
-              p2Diagonal += 1;
+              p2Diagonal = 1;
+            }
+          }
+        }
+      }
+    }
+
+    for (let c = columnsLength; c > 0; c--) {
+      for (let i = 0; i < rowLength; i++) {
+        if (
+          columns[c] &&
+          columns[c][i] &&
+          columns[c - 1] &&
+          columns[c - 2] &&
+          columns[c - 3] &&
+          columns[c - 1][i + 1] &&
+          columns[c - 2][i + 2] &&
+          columns[c - 3][i + 3]
+        ) {
+          if (
+            columns[c][i] === columns[c - 1][i + 1] &&
+            columns[c - 1][i + 1] === columns[c - 2][i + 2] &&
+            columns[c - 2][i + 2] === columns[c - 3][i + 3]
+          ) {
+            if (columns[c][i] === "P1") {
+              p1BackDiagonal = 1;
+            } else {
+              p2BackDiagonal = 1;
             }
           }
         }
@@ -132,7 +182,9 @@ const App = () => {
       p1Row,
       p2Row,
       p1Diagonal,
-      p2Diagonal
+      p2Diagonal,
+      p1BackDiagonal,
+      p2BackDiagonal
     );
   };
 
@@ -142,10 +194,10 @@ const App = () => {
     p1Row: number,
     p2Row: number,
     p1Diagonal: number,
-    p2Diagonal: number
+    p2Diagonal: number,
+    p1BackDiagonal: number,
+    p2BackDiagonal: number
   ) => {
-    console.log(p1Diagonal + "  - p1 dia  | ", p2Diagonal + "  - p2 dia  | ");
-
     if (p1Column) {
       return setWinner(players["P1"]);
     }
@@ -162,6 +214,12 @@ const App = () => {
       return setWinner(players["P1"]);
     }
     if (p2Diagonal) {
+      return setWinner(players["P2"]);
+    }
+    if (p1BackDiagonal) {
+      return setWinner(players["P1"]);
+    }
+    if (p2BackDiagonal) {
       return setWinner(players["P2"]);
     }
   };
