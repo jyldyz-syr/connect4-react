@@ -4,11 +4,11 @@ import React, { useEffect, useState } from "react";
 const initialState: Array<Array<string>> = [[], [], [], [], [], [], []];
 
 const App = () => {
-  const [columns, setColumns] = useState(
+  const [columns, setColumns] = useState<Array<[string]>>(
     JSON.parse(JSON.stringify(initialState))
   );
 
-  const [players, setPlayers] = useState<any>({
+  const [players, setPlayers] = useState<{[key: string]: string |null}>({
     P1: "Player 1",
     P2: "Player 2",
   });
@@ -16,7 +16,7 @@ const App = () => {
   const [currentPlayer, setCurrentPlayer] = useState<string>("P1");
   const [winner, setWinner] = useState<null | string>(null);
 
-  const setPlayersOne = () => {
+  const getPlayersNames = () => {
     let P1: string | null;
     let P2: string | null;
 
@@ -32,7 +32,7 @@ const App = () => {
     ) {
       alert("Error: give different names to players");
 
-      setPlayersOne();
+      getPlayersNames();
     }
 
     return {
@@ -42,7 +42,7 @@ const App = () => {
   };
 
   useEffect(() => {
-    const { P1, P2 } = setPlayersOne();
+    const { P1, P2 } = getPlayersNames();
 
     setPlayers({ P1, P2 });
   }, []);
