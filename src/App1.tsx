@@ -65,103 +65,63 @@ const App = () => {
   };
 
   const checkWinner = () => {
-    let p1Column: number = 0;
-    let p2Column: number = 0;
-    let p1Row: number = 0;
-    let p2Row: number = 0;
-    let p1Diagonal: number = 0;
-    let p2Diagonal: number = 0;
-
-    for (let c = 0; c < columns.length; c++) {
-      for (let i = 0; i < columns[c].length; i++) {
-        if (columns[c][i] && columns[c][i + 1]) {
-          if (
-            columns[c][i] === columns[c][i + 1] &&
-            columns[c][i + 1] === columns[c][i + 2] &&
-            columns[c][i + 2] === columns[c][i + 3]
-          ) {
-            if (columns[c][i] === "P1") {
-              p1Column += 1;
-            } else {
-              p2Column += 1;
+      let p1Column: number = 0;
+      let p2Column: number = 0;
+      let p1Row: number = 0;
+      let p2Row: number = 0;
+  
+      for (let c = 0; c < columns.length; c++) {
+        for (let i = 0; i < columns[c].length; i++) {
+          if (columns[c][i] && columns[c][i+1]) {
+            if (columns[c][i] === columns[c][i+1]) {
+              if (columns[c][i] === "P1") {
+                p1Column+=1;
+              } else {
+                p2Column+=1;
+              }
             }
           }
         }
       }
-    }
 
-    for (let c = 0; c < columns.length; c++) {
-      for (let i = 0; i < columns[c].length; i++) {
-        if (columns[c][i] && columns[c + 1] && columns[c + 1][i]) {
-          if (
-            columns[c][i] === columns[c + 1][i] &&
-            columns[c + 1][i] === columns[c + 2][i] &&
-            columns[c + 2][i] === columns[c + 3][i]
-          ) {
-            if (columns[c][i] === "P1") {
-              p1Row += 1;
-            } else {
-              p2Row += 1;
+
+      for (let c = 0; c < columns.length; c++) {
+        for (let i = 0; i < columns[c].length; i++) {
+          if (columns[c][i] && columns[c + 1] && columns[c + 1][i]) {
+            if (columns[c][i] === columns[c + 1][i]) {
+              if (columns[c][i] === "P1") {
+                p1Row+=1;
+              } else {
+                p2Row+=1;
+              }
             }
           }
         }
       }
-    }
-
-    for (let c = 0; c < columns.length; c++) {
-      for (let i = 0; i < columns[c].length; i++) {
-        if (columns[c][i] && columns[c + 1] && columns[c + 1][i + 1]) {
-          if (
-            columns[c][i] === columns[c + 1][i + 1] &&
-            columns[c + 1][i + 1] === columns[c + 2][i + 2] &&
-            columns[c + 2][i + 2] === columns[c + 3][i + 3]
-          ) {
-            if (columns[c][i] === "P1") {
-              p1Diagonal += 1;
-            } else {
-              p2Diagonal += 1;
-            }
-          }
-        }
-      }
-    }
-
-    checkColumnsAndRows(
-      p1Column,
-      p2Column,
-      p1Row,
-      p2Row,
-      p1Diagonal,
-      p2Diagonal
-    );
+      checkColumnsAndRows( p1Column, p2Column, p1Row, p2Row);
+    // });
   };
 
   const checkColumnsAndRows = (
+
     p1Column: number,
     p2Column: number,
     p1Row: number,
     p2Row: number,
-    p1Diagonal: number,
-    p2Diagonal: number
-  ) => {
-    console.log(p1Diagonal + "  - p1 dia  | ", p2Diagonal + "  - p2 dia  | ");
 
-    if (p1Column) {
+  ) => {
+
+  
+    if (p1Column == 3) {
       return setWinner(players["P1"]);
     }
-    if (p2Column) {
+    if (p2Column == 3) {
       return setWinner(players["P2"]);
     }
-    if (p1Row) {
+    if (p1Row == 3) {
       return setWinner(players["P1"]);
     }
-    if (p2Row) {
-      return setWinner(players["P2"]);
-    }
-    if (p1Diagonal) {
-      return setWinner(players["P1"]);
-    }
-    if (p2Diagonal) {
+    if (p2Row == 3) {
       return setWinner(players["P2"]);
     }
   };
