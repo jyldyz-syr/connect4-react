@@ -1,5 +1,6 @@
 import { render } from "react-dom";
 import React, { useEffect, useState } from "react";
+import styled from "styled-components";
 
 const initialState: Array<Array<string>> = [[], [], [], [], [], [], []];
 
@@ -47,7 +48,7 @@ const App = () => {
     setPlayers({ P1, P2 });
   }, []);
 
-  const clickHandler = (id: number) => { 
+  const clickHandler = (id: number) => {
     const newArr = columns;
 
     if (newArr[id].length >= 6) return;
@@ -224,33 +225,39 @@ const App = () => {
     }
   };
 
-  const wrapperStyle: { [key: string]: string } = {
-    width: "490px",
-    display: "flex",
-    justifyContent: "space-around",
-    margin: "0 auto",
-  };
+  // STYLES
 
-  const columnStyle: { [key: string]: string } = {
-    border: "1px solid black",
-    width: "60px",
-    height: "360px",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-  };
+  const Wrapper = styled.div`
+    width: 490px;
+    display: flex;
+    justifycontent: space-around;
+    margin: 0 auto;
+    background-image: url("paper.gif");
+  `;
 
-  const getDiskStyle = (x: string | null) => ({
-    width: "50px",
-    height: "50px",
-    marginBottom: "5px",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: "50%",
-    backgroundColor: x === "P1" ? "black" : "red",
-    color: x === "P1" ? "white" : "yellow",
-  });
+  const Column = styled.div`
+    border: 1px solid black;
+    width: 60px;
+    height: 360px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  `;
+
+  const Disk = styled.div<{ player: string }>`
+    width: 50px;
+    height: 50px;
+    margin-bottom: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    background-color: ${({player}) =>
+      player === "P1" ? "black" : "red"};
+    color:${({player}) =>
+      player === "P1" ? "white" : "yellow"};
+    `;
+ 
 
   const cleanBoard = () => {
     setWinner(null);
@@ -260,26 +267,20 @@ const App = () => {
   return (
     <>
       {!!winner && `${winner} Win!`}
-      <div style={wrapperStyle}>
+      <Wrapper>
         {columns.map((column: Array<string>, idx: number) => {
           return (
-            <div
+            <Column
               key={idx}
-              style={columnStyle}
               onClick={!!winner ? cleanBoard : () => clickHandler(idx)}
             >
-              {column.map((personDisc: string, i: number) => {
-                const currentDiscStyle = getDiskStyle(personDisc);
-                return (
-                  <div key={i} style={currentDiscStyle}>
-                    {players[personDisc]}
-                  </div>
-                );
-              })}
-            </div>
+              {column.map((element: string, i: number) => (
+                <Disk key={i} player={element}>{players[element]}</Disk>
+              ))}
+            </Column>
           );
         })}
-      </div>
+      </Wrapper>
     </>
   );
 };
