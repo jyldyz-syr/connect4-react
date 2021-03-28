@@ -1,11 +1,16 @@
-import { render } from "react-dom";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
-const initialState: Array<Array<string>> = [[], [], [], [], [], [], []];
+const initialState: Array<Array<string>> = [
+  ['', '', '', '', '', ''],
+  ['', '', '', '', '', ''],
+  ['', '', '', '', '', ''],
+  ['', '', '', '', '', ''],
+  ['', '', '', '', '', ''],
+];
 
 const App = () => {
-  const [columns, setColumns] = useState<Array<[string]>>(
+  const [columns, setColumns] = useState<Array<Array<string>>>(
     JSON.parse(JSON.stringify(initialState))
   );
 
@@ -48,12 +53,13 @@ const App = () => {
     setPlayers({ P1, P2 });
   }, []);
 
-  const clickHandler = (id: number) => {
-    const newArr = columns;
+  const clickHandler = (columnId: number, fieldId: number) => {
+    let newArr = columns;
 
-    if (newArr[id].length >= 6) return;
+    // if (newArr[columnId].length >= 6) return;
 
-    newArr[id].push(currentPlayer);
+    if (newArr[columnId][fieldId] !== '') return
+    newArr[columnId][fieldId] = currentPlayer;
 
     setColumns(newArr);
 
@@ -236,7 +242,6 @@ const App = () => {
   `;
 
   const Column = styled.div`
-    border: 1px solid black;
     width: 60px;
     height: 360px;
     display: flex;
@@ -244,20 +249,36 @@ const App = () => {
     align-items: center;
   `;
 
-  const Disk = styled.div<{ player: string }>`
+  const Disk = styled.div`
+    border: 1px solid red;
+    border-radius: 6px;
     width: 50px;
     height: 50px;
-    margin-bottom: 5px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 50%;
-    background-color: ${({player}) =>
-      player === "P1" ? "black" : "red"};
-    color:${({player}) =>
-      player === "P1" ? "white" : "yellow"};
-    `;
- 
+    margin-bottom: 10px;
+    position: relative;
+  `;
+
+  const ColorFieldP1 = styled.div`
+    position: absolute;
+    content: '';
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 6px;
+    background: yellow;
+  `;
+
+  const ColorFieldP2 = styled.div`
+    position: absolute;
+    content: '';
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 6px;
+    background: red;
+  `;
 
   const cleanBoard = () => {
     setWinner(null);
@@ -270,13 +291,22 @@ const App = () => {
       <Wrapper>
         {columns.map((column: Array<string>, idx: number) => {
           return (
-            <Column
-              key={idx}
-              onClick={!!winner ? cleanBoard : () => clickHandler(idx)}
-            >
-              {column.map((element: string, i: number) => (
-                <Disk key={i} player={element}>{players[element]}</Disk>
-              ))}
+            <Column key={idx}>
+              {column.map((element: string, i: number) => {
+                return (
+                  <Disk key={i + 'i'} onClick={
+                    !!winner
+                      ? cleanBoard
+                      : () => clickHandler(idx, i)
+                  }>
+                    {element === 'P1'
+                      ? <ColorFieldP1 />
+                      : element === 'P2'
+                        ? <ColorFieldP2 />
+                        : ''}
+                  </Disk>
+                )
+              })}
             </Column>
           );
         })}
