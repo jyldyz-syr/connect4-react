@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 const initialState: Array<Array<string>> = [
-  ['', '', '', '', '', ''],
-  ['', '', '', '', '', ''],
-  ['', '', '', '', '', ''],
-  ['', '', '', '', '', ''],
-  ['', '', '', '', '', ''],
+  ["", "", "", "", "", ""],
+  ["", "", "", "", "", ""],
+  ["", "", "", "", "", ""],
+  ["", "", "", "", "", ""],
+  ["", "", "", "", "", ""],
+  ["", "", "", "", "", ""],
 ];
 
 const App = () => {
@@ -56,9 +57,7 @@ const App = () => {
   const clickHandler = (columnId: number, fieldId: number) => {
     let newArr = columns;
 
-    // if (newArr[columnId].length >= 6) return;
-
-    if (newArr[columnId][fieldId] !== '') return
+    if (newArr[columnId][fieldId] !== "") return;
     newArr[columnId][fieldId] = currentPlayer;
 
     setColumns(newArr);
@@ -231,10 +230,10 @@ const App = () => {
     }
   };
 
-  // STYLES
 
   const Wrapper = styled.div`
-    width: 490px;
+    width: 800px;
+    height: 800px;
     display: flex;
     justifycontent: space-around;
     margin: 0 auto;
@@ -242,42 +241,61 @@ const App = () => {
   `;
 
   const Column = styled.div`
-    width: 60px;
-    height: 360px;
+    padding-top: 50px;
+    width: 150px;
+    height: 700px;
     display: flex;
     flex-direction: column;
     align-items: center;
   `;
 
   const Disk = styled.div`
-    border: 1px solid red;
     border-radius: 6px;
-    width: 50px;
-    height: 50px;
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
     margin-bottom: 10px;
     position: relative;
+    -webkit-box-shadow: -1px 2px 82px -5px rgba(107, 94, 107, 0.59);
+    -moz-box-shadow: -1px 2px 82px -5px rgba(107, 94, 107, 0.59);
+    box-shadow: -1px 2px 82px -5px rgba(107, 94, 107, 0.59);
   `;
 
   const ColorFieldP1 = styled.div`
     position: absolute;
-    content: '';
+    border-radius: 50%;
+    content: "";
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    border-radius: 6px;
     background: yellow;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   `;
 
   const ColorFieldP2 = styled.div`
     position: absolute;
-    content: '';
+    border-radius: 50%;
+    content: "";
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    border-radius: 6px;
     background: red;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  `;
+
+  const FieldText = styled.div`
+    color: dark grey;
+    border-radius: 50%;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+    word-wrap: break-word;
+    margin: 10px;
   `;
 
   const cleanBoard = () => {
@@ -294,18 +312,24 @@ const App = () => {
             <Column key={idx}>
               {column.map((element: string, i: number) => {
                 return (
-                  <Disk key={i + 'i'} onClick={
-                    !!winner
-                      ? cleanBoard
-                      : () => clickHandler(idx, i)
-                  }>
-                    {element === 'P1'
-                      ? <ColorFieldP1 />
-                      : element === 'P2'
-                        ? <ColorFieldP2 />
-                        : ''}
+                  <Disk
+                    key={i + "i"}
+                    onClick={!!winner ? cleanBoard : () => clickHandler(idx, i)}
+                  >
+                    {element === "P1" ? (
+                      <ColorFieldP1>
+                        {" "}
+                        <FieldText>{players.P1}</FieldText>
+                      </ColorFieldP1>
+                    ) : element === "P2" ? (
+                      <ColorFieldP2>
+                        <FieldText>{players.P2}</FieldText>
+                      </ColorFieldP2>
+                    ) : (
+                      ""
+                    )}
                   </Disk>
-                )
+                );
               })}
             </Column>
           );
