@@ -1,20 +1,20 @@
 {
   "files": {
     "main.css": "/connect4-react/static/css/main.6dea0f05.chunk.css",
-    "main.js": "/connect4-react/static/js/main.234fe939.chunk.js",
-    "main.js.map": "/connect4-react/static/js/main.234fe939.chunk.js.map",
+    "main.js": "/connect4-react/static/js/main.37cbf3e6.chunk.js",
+    "main.js.map": "/connect4-react/static/js/main.37cbf3e6.chunk.js.map",
     "runtime-main.js": "/connect4-react/static/js/runtime-main.7e173503.js",
     "runtime-main.js.map": "/connect4-react/static/js/runtime-main.7e173503.js.map",
-    "static/js/2.99558310.chunk.js": "/connect4-react/static/js/2.99558310.chunk.js",
-    "static/js/2.99558310.chunk.js.map": "/connect4-react/static/js/2.99558310.chunk.js.map",
+    "static/js/2.c2020ab2.chunk.js": "/connect4-react/static/js/2.c2020ab2.chunk.js",
+    "static/js/2.c2020ab2.chunk.js.map": "/connect4-react/static/js/2.c2020ab2.chunk.js.map",
     "index.html": "/connect4-react/index.html",
     "static/css/main.6dea0f05.chunk.css.map": "/connect4-react/static/css/main.6dea0f05.chunk.css.map",
-    "static/js/2.99558310.chunk.js.LICENSE.txt": "/connect4-react/static/js/2.99558310.chunk.js.LICENSE.txt"
+    "static/js/2.c2020ab2.chunk.js.LICENSE.txt": "/connect4-react/static/js/2.c2020ab2.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.7e173503.js",
-    "static/js/2.99558310.chunk.js",
+    "static/js/2.c2020ab2.chunk.js",
     "static/css/main.6dea0f05.chunk.css",
-    "static/js/main.234fe939.chunk.js"
+    "static/js/main.37cbf3e6.chunk.js"
   ]
 }
