@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { Modal } from "./Modal/ModalComponent";
 
 const initialState: Array<Array<string>> = [
   ["", "", "", "", "", ""],
@@ -19,6 +20,9 @@ const App = () => {
     P1: "Player 1",
     P2: "Player 2",
   });
+
+  const [isModalOpen, setModalState] = React.useState(false);
+  const toggleModal = () => setModalState(!isModalOpen);
 
   const [currentPlayer, setCurrentPlayer] = useState<string>("P1");
   const [winner, setWinner] = useState<null | string>(null);
@@ -54,6 +58,19 @@ const App = () => {
     setPlayers({ P1, P2 });
   }, []);
 
+  useEffect(() => {
+    if (winner !== null) {
+      setModalState(!isModalOpen);
+      setColumns(JSON.parse(JSON.stringify(initialState)));
+    }
+  }, [winner]);
+
+  useEffect(() => {
+    if (columns == initialState) {
+      setWinner(null);
+    }
+  }, [columns]);
+
   const clickHandler = (columnId: number, fieldId: number) => {
     let newArr = columns;
 
@@ -67,6 +84,7 @@ const App = () => {
     } else {
       setCurrentPlayer("P1");
     }
+
     checkWinner();
   };
 
@@ -112,7 +130,9 @@ const App = () => {
           columns[c + 1] &&
           columns[c + 1][i] &&
           columns[c + 2] &&
-          columns[c + 3]
+          columns[c + 3] &&
+          columns[c + 2][i] &&
+          columns[c + 3][i]
         ) {
           if (
             columns[c][i] === columns[c + 1][i] &&
@@ -204,32 +224,31 @@ const App = () => {
     p1BackDiagonal: number,
     p2BackDiagonal: number
   ) => {
-    if (p1Column) {
+    if (p1Column >= 1) {
       return setWinner(players["P1"]);
     }
-    if (p2Column) {
+    if (p2Column >= 1) {
       return setWinner(players["P2"]);
     }
-    if (p1Row) {
+    if (p1Row >= 1) {
       return setWinner(players["P1"]);
     }
-    if (p2Row) {
+    if (p2Row >= 1) {
       return setWinner(players["P2"]);
     }
-    if (p1Diagonal) {
+    if (p1Diagonal >= 1) {
       return setWinner(players["P1"]);
     }
-    if (p2Diagonal) {
+    if (p2Diagonal >= 1) {
       return setWinner(players["P2"]);
     }
-    if (p1BackDiagonal) {
+    if (p1BackDiagonal >= 1) {
       return setWinner(players["P1"]);
     }
-    if (p2BackDiagonal) {
+    if (p2BackDiagonal >= 1) {
       return setWinner(players["P2"]);
     }
   };
-
 
   const Wrapper = styled.div`
     width: 800px;
@@ -298,42 +317,40 @@ const App = () => {
     margin: 10px;
   `;
 
-  const cleanBoard = () => {
-    setWinner(null);
-    setColumns(JSON.parse(JSON.stringify(initialState)));
-  };
-
   return (
     <>
-      {!!winner && `${winner} Win!`}
       <Wrapper>
         {columns.map((column: Array<string>, idx: number) => {
           return (
             <Column key={idx}>
               {column.map((element: string, i: number) => {
                 return (
-                  <Disk
-                    key={i + "i"}
-                    onClick={!!winner ? cleanBoard : () => clickHandler(idx, i)}
-                  >
-                    {element === "P1" ? (
-                      <ColorFieldP1>
-                        {" "}
-                        <FieldText>{players.P1}</FieldText>
-                      </ColorFieldP1>
-                    ) : element === "P2" ? (
-                      <ColorFieldP2>
-                        <FieldText>{players.P2}</FieldText>
-                      </ColorFieldP2>
-                    ) : (
-                      ""
-                    )}
-                  </Disk>
+                  <>
+                    <Disk key={i + "i"} onClick={() => clickHandler(idx, i)}>
+                      {element === "P1" ? (
+                        <ColorFieldP1>
+                          {" "}
+                          <FieldText>{players.P1}</FieldText>
+                        </ColorFieldP1>
+                      ) : element === "P2" ? (
+                        <ColorFieldP2>
+                          <FieldText>{players.P2}</FieldText>
+                        </ColorFieldP2>
+                      ) : (
+                        ""
+                      )}
+                    </Disk>
+                  </>
                 );
               })}
             </Column>
           );
         })}
+        <Modal
+          title={`${winner} is a Winner!`}
+          isOpen={isModalOpen}
+          onClose={toggleModal}
+        ></Modal>
       </Wrapper>
     </>
   );
